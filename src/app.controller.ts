@@ -5,7 +5,11 @@ import { ApiTags } from '@nestjs/swagger';
 export class AppController {
 
   @Get()
-  getHello(): string {
-    return "It's Ok";
+  getHello() {
+    return {
+      message: "It's Ok",
+      status: 200,
+      timestamp: new Date().toISOString(),
+    };
   }
 }

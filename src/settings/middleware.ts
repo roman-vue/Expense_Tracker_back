@@ -4,15 +4,15 @@ import { Request, Response, NextFunction } from 'express';
 @Injectable()
 export class Middleware implements NestMiddleware {
     use(req: Request, res: Response, next: NextFunction) {
-      const { method, originalUrl } = req;
+      const { method, originalUrl , ip} = req;
       const start = Date.now();
   
-      Logger.log(`Inicio: ${method} ${originalUrl} - ${new Date().toISOString()}`);
+      Logger.log(`${method} ${originalUrl} - ${new Date().toISOString()} ${ip}`,`Inicio`);
   
       res.on('finish', () => {
         const end = Date.now();
         const duration = end - start;
-        Logger.log(`Fin: ${method} ${originalUrl} - ${new Date().toISOString()} - Duración: ${duration}ms - Estado: ${res.statusCode}`);
+        Logger.log(`${method} ${originalUrl} - ${new Date().toISOString()} ${ip}`, `Fin: Duración: ${duration}ms - Estado: ${res.statusCode}`);
       });
 
       res.on('error', (err: Error) => {
