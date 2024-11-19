@@ -11,7 +11,8 @@ import { PassportModule } from './passport/passport.module';
 import { Middleware } from './settings/middleware';
 
 @Module({
-  imports: [ConfigModule.forRoot({envFilePath: '.env', isGlobal:true}), AuthModule, UsersModule, DashboardModule, NotificationsModule, ApiModule, DatabaseModule, PassportModule],
+  imports: [ConfigModule.forRoot({envFilePath: '.env', isGlobal:true}), 
+    AuthModule, UsersModule, DashboardModule, NotificationsModule, ApiModule, DatabaseModule, PassportModule],
   controllers: [AppController],
 })
 export class AppModule {
