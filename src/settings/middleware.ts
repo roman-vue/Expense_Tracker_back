@@ -4,7 +4,7 @@ import { Request, Response, NextFunction } from 'express';
 @Injectable()
 export class Middleware implements NestMiddleware {
     use(req: Request, res: Response, next: NextFunction) {
-      const { method, originalUrl , ip} = req;
+      const { method, originalUrl , ip, errored} = req;
       const start = Date.now();
   
       Logger.log(`${method} ${originalUrl} - ${new Date().toISOString()} ${ip}`,`Inicio`);
@@ -22,7 +22,7 @@ export class Middleware implements NestMiddleware {
       try {
         next();
       } catch (err) {
-        console.error(`Error Capturado: ${method} ${originalUrl} - ${new Date().toISOString()} - Mensaje: ${err.message}`);
+        Logger.error(`Error Capturado: ${method} ${originalUrl} - ${new Date().toISOString()} - Mensaje: ${err.message}`);
         throw err;
       }
     }
