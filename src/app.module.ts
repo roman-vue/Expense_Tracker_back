@@ -5,14 +5,12 @@ import { UsersModule } from './modules/users/users.module';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { ApiModule } from './api/api.module';
 import { DatabaseModule } from './database/database.module';
+import { ConfigModule } from '@nestjs/config';
+import { RedisModule } from './redis/redis.module';
 
 @Module({
-  imports: [DatabaseModule, 
-    AuthModule, UsersModule, DashboardModule, ApiModule],
+  imports: [ConfigModule.forRoot({envFilePath:'.env', isGlobal:true}),DatabaseModule, 
+    AuthModule, UsersModule, DashboardModule, ApiModule, RedisModule],
   controllers: [AppController],
 })
-export class AppModule {
-  init(){
-    Logger.debug('epa')
-  }
-}
+export class AppModule {}

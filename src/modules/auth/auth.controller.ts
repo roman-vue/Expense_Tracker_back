@@ -1,25 +1,31 @@
-import { Controller, Get, Post, UseGuards, Request, Body } from '@nestjs/common';
+import { Controller, Get, Post, Request, Body, Param } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { LocalAuthGuard } from 'src/guards/local-guard/local-guard.guard';
 import { AuthDto } from './dto/auth.dto';
-import { UsersDto } from '../users/dto/users.dto';
 import { AuthService } from './auth.service';
+import { UsersDto } from '../users/dto/users.dto';
 @ApiTags('AUTH')
-@UseGuards(LocalAuthGuard)
 @Controller('auth')
 export class AuthController {
     constructor(private authService:AuthService){}
 
     @Post('login')
-    @UseGuards(LocalAuthGuard)
     async login(@Body() AuthDto: AuthDto,@Request() req) {
-      return req.user; // El usuario validado estará en req.user
+      return await this.authService.validateUser(AuthDto)
     }
 
-    @Post('logout')
-    @UseGuards(LocalAuthGuard)
-    async logout(@Request() req) {
-      return req.logout();
+    @Post('refresh/:email/:refresh_token')
+    async refresh(@Param('email') email: string,@Param('refresh_token') refresh_token: string) {
+      return await this.authService.refreshToken(email, refresh_token)
+    }
+
+    @Post('register')
+    async register(@Body() userDto: UsersDto) {
+      return await this.authService.register(userDto)
+    }
+
+    @Post('logout/:email')
+    async logout(@Param('email') email:string) {
+      return await this.authService.logout(email)
     }
 
 }
