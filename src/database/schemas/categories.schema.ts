@@ -6,7 +6,7 @@ export type CategoriesDocument = HydratedDocument<Categories>;
 
 @Schema()
 export class Categories {
-  @Prop()
+  @Prop({unique: true})
   name: string;
 
   @Prop({default: true})

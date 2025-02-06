@@ -8,9 +8,10 @@ import { Model } from 'mongoose';
 @Injectable()
 export class CategoriesService {
   constructor(@InjectModel(Categories.name) private CategoriesModel: Model<Categories>){}
- async create(createCategoryDto: CreateCategoryDto) {
-    const newCategory = new this.CategoriesModel(createCategoryDto);
-    return await newCategory.save();
+ async create({name}: CreateCategoryDto) {
+    const newCategory = new this.CategoriesModel({name});
+    const save = await newCategory.save();
+    return save;
   }
 
   async findAll() {
