@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
@@ -12,27 +12,32 @@ export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
   @Post()
-  create(@Body() createCategoryDto: CreateCategoryDto) {
-    return this.categoriesService.create(createCategoryDto);
+  create(@Body() createCategoryDto: CreateCategoryDto, @Request() req) {
+    const userEmail = req.headers['user-email'] as string;
+    return this.categoriesService.create(createCategoryDto, userEmail);
   }
 
   @Get()
-  findAll() {
-    return this.categoriesService.findAll();
+  findAll(@Request() req) {
+    const userEmail = req.headers['user-email'] as string;
+    return this.categoriesService.findAll(userEmail);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.categoriesService.findOne(id);
+  findOne(@Param('id') id: string, @Request() req) {
+    const userEmail = req.headers['user-email'] as string;
+    return this.categoriesService.findOne(id, userEmail);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCategoryDto: UpdateCategoryDto) {
-    return this.categoriesService.update(id, updateCategoryDto);
+  update(@Param('id') id: string, @Body() updateCategoryDto: UpdateCategoryDto , @Request() req) {
+    const userEmail = req.headers['user-email'] as string;
+    return this.categoriesService.update(id, updateCategoryDto, userEmail);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.categoriesService.remove(id);
+  remove(@Param('id') id: string, @Request() req) {
+    const userEmail = req.headers['user-email'] as string;  
+    return this.categoriesService.remove(id, userEmail);
   }
 }

@@ -4,6 +4,7 @@ import { CreateWalletDto } from './dto/create-wallet.dto';
 import { UpdateWalletDto } from './dto/update-wallet.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { LocalGuard } from 'src/guards/local-guard/local-guard.guard';
+import { CreateTransactionsDto } from './dto/create-transactions.dto';
 
 @UseGuards(LocalGuard)
 @ApiBearerAuth()
@@ -39,5 +40,11 @@ export class WalletController {
   remove(@Param('id') id: string, @Request() req) {
     const userEmail = req.headers['user-email'] as string;
     return this.walletService.remove(id, userEmail);
+  }
+
+  @Post('/add-transactions/:walletId')
+  addTransactions(@Param('walletId') walletId: string, @Body() createTransactionsDto: CreateTransactionsDto, @Request() req) {
+    const userEmail = req.headers['user-email'] as string;
+    return this.walletService.addTransactions(walletId, createTransactionsDto, userEmail);
   }
 }

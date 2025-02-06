@@ -9,11 +9,10 @@ import { ConfigModule } from '@nestjs/config';
 import { RedisModule } from './redis/redis.module';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { WalletModule } from './modules/wallet/wallet.module';
-import { TransactionsModule } from './modules/transactions/transactions.module';
 
 @Module({
   imports: [ConfigModule.forRoot({envFilePath:'.env', isGlobal:true}),DatabaseModule, 
-    AuthModule, UsersModule, DashboardModule, ApiModule, RedisModule, CategoriesModule, WalletModule, TransactionsModule],
+    AuthModule, UsersModule, DashboardModule, ApiModule, RedisModule, CategoriesModule, WalletModule],
   controllers: [AppController],
 })
 export class AppModule {}
