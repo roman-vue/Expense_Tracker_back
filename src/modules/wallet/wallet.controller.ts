@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Request, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Request, UseGuards, Put } from '@nestjs/common';
 import { WalletService } from './wallet.service';
 import { CreateWalletDto } from './dto/create-wallet.dto';
 import { UpdateWalletDto } from './dto/update-wallet.dto';
@@ -46,5 +46,18 @@ export class WalletController {
   addTransactions(@Param('walletId') walletId: string, @Body() createTransactionsDto: CreateTransactionsDto, @Request() req) {
     const userEmail = req.headers['user-email'] as string;
     return this.walletService.addTransactions(walletId, createTransactionsDto, userEmail);
+  }
+
+  @Put('/edit-transactions/:transactionId/:walletId')
+  editTransactions(@Param('transactionId') transactionId: string, @Param('walletId') walletId: string, @Body() createTransactionsDto: CreateTransactionsDto, @Request() req) {
+    const userEmail = req.headers['user-email'] as string;
+    return this.walletService.editTransactions(transactionId,walletId, userEmail, createTransactionsDto);
+  }
+
+  
+  @Delete('/delete-transactions/:transactionId/:walletId')
+  deleteTransactions(@Param('transactionId') transactionId: string, @Param('walletId') walletId: string, @Request() req) {
+    const userEmail = req.headers['user-email'] as string;
+    return this.walletService.deleteTransactions(transactionId,walletId, userEmail);
   }
 }

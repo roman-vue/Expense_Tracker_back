@@ -41,22 +41,20 @@ export class WalletService {
       );
 
       return {
-        ...wallet.toObject(), // Convertir a objeto plano si es un modelo de Mongoose
-        balance: totalBalance, // Agregar el balance
+        ...wallet.toObject(),
+        balance: totalBalance,
       };
     });
 
-    // Calcular el balance total sumando todas las wallets
     const totalBalance = walletsWithBalance.reduce(
       (sum, wallet) => sum + wallet.balance,
       0,
     );
 
     return {
-      totalBalance, // Agregar el balance total
-      wallets: walletsWithBalance, // Lista de wallets con su balance
+      totalBalance,
+      wallets: walletsWithBalance,
     };
-    return wallets;
   }
 
   async findOne(id: string, email: string) {
@@ -99,5 +97,35 @@ export class WalletService {
     wallet.transactions.push({id: v4(), ...createTransactionsDto});
     const walletUpdated = new this.walletModel(wallet);
     return await walletUpdated.save();
+  }
+
+  async editTransactions(transactionId:string, walletId:string, email:string, createTransactionsDto:CreateTransactionsDto){
+    const wallet = await this.findOne(walletId, email);
+    const transaction = wallet.transactions.find(transaction => transaction.id == transactionId);
+    if(!transaction){
+      throw new NotFoundException('Transaction not found');
+    }
+    const category = await this.categorieService.findOne(
+      createTransactionsDto.category,
+      email,
+    );
+    transaction.amount = createTransactionsDto.amount;
+    transaction.category = `${category._id}`;
+    transaction.description = createTransactionsDto.description;
+    const walletUpdated = new this.walletModel(wallet);
+    return await walletUpdated.save();
+  }
+
+  async deleteTransactions(transactionId:string, walletId:string, email:string){
+    const wallet = await this.findOne(walletId, email);
+    const transaction = wallet.transactions.findIndex(transaction => transaction.id == transactionId);
+    if(transaction == -1 ){
+      throw new NotFoundException('Transaction not found');
+    }
+
+    wallet.transactions.splice(transaction, 1)
+    
+    const walletUpdated = await this.walletModel.findByIdAndUpdate(walletId, { transactions: wallet.transactions }, { new: true });
+    return `Delete transactions`
   }
 }
