@@ -3,25 +3,30 @@ import { RedisService } from './redis.service';
 import Redis from 'ioredis';
 
 @Global()
-@Module({ providers: [
+@Module({
+  providers: [
     {
       provide: 'REDIS_CLIENT',
       useFactory: async () => {
-        const redis = new Redis({
-          host: process.env.REDIS_HOST || '127.0.0.1',
-          port: parseInt(process.env.REDIS_PORT || '6379'),
-          password: process.env.REDIS_PASSWORD || undefined,
-          db: Number(process.env.REDIS_DB) || 0,
-        });
+        const redisUrl = process.env.REDIS_URL;
+        if (!redisUrl) {
+          throw new Error('REDIS_URL is not defined in environment variables');
+        }
 
-        // Opcional: Escuchar eventos de conexión
-        redis.on('connect', () => Logger.log('Connected to Redis'));
-        redis.on('error', (err) => Logger.error('Redis error:', err));
+        const redis = new Redis(redisUrl); // rediss:// y redis:// soportados automáticamente
+
+        redis.on('connect', () =>
+          Logger.log('✅ Connected to Redis', 'RedisModule'),
+        );
+        redis.on('error', (err) =>
+          Logger.error('❌ Redis error:', err, 'RedisModule'),
+        );
 
         return redis;
       },
     },
     RedisService,
   ],
-  exports: ['REDIS_CLIENT', RedisService],})
+  exports: ['REDIS_CLIENT', RedisService],
+})
 export class RedisModule {}
