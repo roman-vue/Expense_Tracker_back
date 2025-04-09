@@ -23,7 +23,7 @@ async function bootstrap() {
     app.useGlobalPipes(new ValidationPipe());
     app.enableCors();
     app.setGlobalPrefix(prefix);
-    let user = process.env.ADMIN_USER
+    // let user = process.env.ADMIN_USER
   SwaggerConfig.ConfigSwaggerModule(app);
   let port = 3000;
   await app.listen(port, () => {
