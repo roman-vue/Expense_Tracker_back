@@ -17,9 +17,11 @@ export class AuthService {
   public async validateUser({email, password}:AuthDto) {
     try {
       const user = await this.userService.findUserByEmail(email);
+      console.log('user', user)
       if (!user) throw new UnauthorizedException('User not found');
-
+       console.log('password', password)
       const isPasswordValid = await bcrypt.compare(password, user.password);
+      console.log('isPasswordValid', isPasswordValid)
       if (!isPasswordValid) throw new UnauthorizedException('Invalid password');
       
       let tokens= {
