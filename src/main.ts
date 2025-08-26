@@ -25,8 +25,9 @@ async function bootstrap() {
     app.setGlobalPrefix(prefix);
     // let user = process.env.ADMIN_USER
   SwaggerConfig.ConfigSwaggerModule(app);
-  let port = 3000;
+  let port = process.env.PORT || 3000;
   await app.listen(port, () => {
+
     logger.log('APP', `running on http://localhost:${port}`);
     logger.debug(
       'APP',
