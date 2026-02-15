@@ -1,0 +1,38 @@
+name: Deploy Expenses Backend
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Server via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            # 1. Entrar a la carpeta donde vive el docker-compose global
+            cd ~/apps/Expense_Tracker_back
+            
+            # 2. Entrar a la carpeta del proyecto de gastos
+            # (Asegúrate de que esta ruta sea la correcta en tu servidor)
+            cd ../apps/Expense_Tracker_back || git clone https://github.com/roman-vue/Expense_Tracker_back.git ../apps/Expense_Tracker_back
+            cd ../apps/Expense_Tracker_back
+            
+            # 3. Actualizar código
+            git pull origin master
+            
+            # 4. Volver a la carpeta de infra para reiniciar el contenedor específico
+            cd ~/apps/infra
+            docker compose build expenses_b
+            docker compose up -d expenses_b
+            
+            # 5. Limpieza de las imágenes viejas de 1.6GB
+            docker image prune -f
