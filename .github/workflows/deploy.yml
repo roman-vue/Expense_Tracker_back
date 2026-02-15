@@ -30,7 +30,6 @@ jobs:
             git pull origin master
             
             # 4. Volver a la carpeta de infra para reiniciar el contenedor específico
-            cd ~/apps/infra
             docker compose build expenses_b
             docker compose up -d expenses_b
             
