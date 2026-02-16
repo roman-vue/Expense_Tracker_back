@@ -18,14 +18,14 @@ async function bootstrap() {
     new ResponseInterceptor(),
     new TimeoutInterceptor(),
     );
-    let prefix = process.env.API_PREFIX || 'api';
+    let prefix = 'api';
     app.useGlobalFilters(new AllExceptionFilter(logger));
     app.useGlobalPipes(new ValidationPipe());
     app.enableCors();
     app.setGlobalPrefix(prefix);
     // let user = process.env.ADMIN_USER
   SwaggerConfig.ConfigSwaggerModule(app);
-  let port = process.env.PORT || 3000;
+  let port = process.env.PORT || 3032;
   await app.listen(port, () => {
 
     logger.log('APP', `running on http://localhost:${port}`);
