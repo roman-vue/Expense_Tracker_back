@@ -22,8 +22,8 @@ jobs:
             
             # 2. Entrar a la carpeta del proyecto de gastos
             # (Asegúrate de que esta ruta sea la correcta en tu servidor)
-            cd Expense_Tracker_back || git clone https://github.com/roman-vue/Expense_Tracker_back.git Expense_Tracker_back
-            cd Expense_Tracker_back
+            cd Expense_Tracker_back || git clone https://github.com/roman-vue/Expense_Tracker_back.git expense_b
+            cd expense_b
             
             # 3. Actualizar código
             git pull origin master
