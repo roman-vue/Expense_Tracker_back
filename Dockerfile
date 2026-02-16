@@ -16,4 +16,4 @@ RUN npm install --only=production --force --legacy-peer-deps
 
 EXPOSE 3032
 # Ejecutamos con node directamente, no con npm start
-CMD ["node", "dist/main"]
+CMD ["node", "dist/main.js"]
